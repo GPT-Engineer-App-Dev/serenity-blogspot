@@ -10,6 +10,7 @@ const Index = () => {
 
   const [newPost, setNewPost] = useState({ title: "", date: "", content: "" });
   const { colorMode, toggleColorMode } = useColorMode();
+  const [postToDelete, setPostToDelete] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,6 +21,19 @@ const Index = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewPost({ ...newPost, [name]: value });
+  };
+
+  const handleDelete = (index) => {
+    setPosts(posts.filter((_, i) => i !== index));
+    setPostToDelete(null);
+  };
+
+  const confirmDelete = (index) => {
+    setPostToDelete(index);
+  };
+
+  const cancelDelete = () => {
+    setPostToDelete(null);
   };
 
   return (
@@ -69,11 +83,23 @@ const Index = () => {
           <VStack spacing={8} align="stretch">
             {posts.map((post, index) => (
               <Box key={index} p={4} borderWidth="1px" borderRadius="md">
-                <Heading as="h2" size="md">{post.title}</Heading>
-                <Text fontSize="sm" color="gray.500">{post.date}</Text>
-                <Text mt={2}>{post.content}</Text>
+                <Flex justify="space-between" align="center">
+                  <Box>
+                    <Heading as="h2" size="md">{post.title}</Heading>
+                    <Text fontSize="sm" color="gray.500">{post.date}</Text>
+                    <Text mt={2}>{post.content}</Text>
+                  </Box>
+                  <Button colorScheme="red" onClick={() => confirmDelete(index)}>Delete</Button>
+                </Flex>
               </Box>
             ))}
+            {postToDelete !== null && (
+              <Box p={4} borderWidth="1px" borderRadius="md" bg="red.100" mt={4}>
+                <Text>Are you sure you want to delete this post?</Text>
+                <Button colorScheme="red" onClick={() => handleDelete(postToDelete)}>Yes</Button>
+                <Button ml={4} onClick={cancelDelete}>No</Button>
+              </Box>
+            )}
           </VStack>
         </Box>
 

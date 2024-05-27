@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Box, Container, Flex, Heading, Text, VStack, Link, HStack, Divider, SimpleGrid, Input, Textarea, Button } from "@chakra-ui/react";
-import { FaTwitter, FaFacebook, FaInstagram } from "react-icons/fa";
+import { Box, Container, Flex, Heading, Text, VStack, Link, HStack, Divider, SimpleGrid, Input, Textarea, Button, useColorMode, IconButton } from "@chakra-ui/react";
+import { FaTwitter, FaFacebook, FaInstagram, FaSun, FaMoon } from "react-icons/fa";
 
 const Index = () => {
   const [posts, setPosts] = useState([
@@ -9,6 +9,7 @@ const Index = () => {
   ]);
 
   const [newPost, setNewPost] = useState({ title: "", date: "", content: "" });
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,13 +25,20 @@ const Index = () => {
   return (
     <Container maxW="container.xl" p={4}>
       {/* Navigation Bar */}
-      <Flex as="nav" justify="space-between" align="center" mb={8} p={4} bg="gray.100" borderRadius="md">
+      <Flex as="nav" justify="space-between" align="center" mb={8} p={4} bg={colorMode === "light" ? "gray.100" : "gray.700"} borderRadius="md">
         <Heading as="h1" size="lg">My Blog</Heading>
         <HStack spacing={4}>
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
           <Link href="/blog">Blog</Link>
           <Link href="/contact">Contact</Link>
+          <IconButton
+            icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
+            isRound
+            size="md"
+            alignSelf="flex-end"
+            onClick={toggleColorMode}
+          />
         </HStack>
       </Flex>
 
@@ -82,7 +90,7 @@ const Index = () => {
       </Flex>
 
       {/* Footer */}
-      <Box as="footer" mt={16} p={4} bg="gray.100" borderRadius="md">
+      <Box as="footer" mt={16} p={4} bg={colorMode === "light" ? "gray.100" : "gray.700"} borderRadius="md">
         <Divider mb={4} />
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
           <Text>&copy; 2023 My Blog. All rights reserved.</Text>
